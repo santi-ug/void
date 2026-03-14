@@ -7,15 +7,14 @@
 
 import SwiftUI
 
+
 struct ContentView: View {
+    @State private var enableVoid = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        Toggle("Enable Void", isOn: $enableVoid)
+            .toggleStyle(.switch)
+            .padding()
     }
 }
 
