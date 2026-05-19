@@ -8,10 +8,24 @@
 import SwiftUI
 
 @main
-struct voidApp: App {
+struct VoidApp: App {
+    @State private var voidMode = VoidModeController()
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        Window("Void", id: "main") {
+            MiniWindowView()
+                .environment(voidMode)
         }
+        .windowStyle(.hiddenTitleBar)
+        .windowResizability(.contentSize)
+
+        MenuBarExtra(
+            "Void",
+            systemImage: voidMode.isVoidModeEnabled ? "circle.fill" : "circle"
+        ) {
+            MenuBarView()
+                .environment(voidMode)
+        }
+        .menuBarExtraStyle(.window)
     }
 }
