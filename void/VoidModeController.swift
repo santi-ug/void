@@ -30,6 +30,11 @@ final class VoidModeController {
             screen: targetScreen
         )
 
+        // ARC owns this window. Without this, calling close() while we still hold
+        // a strong reference causes AppKit to release the window once and ARC to
+        // release it again — over-release crashes in objc_release.
+        window.isReleasedWhenClosed = false
+
         window.setFrame(screenFrame, display: false)
         window.backgroundColor = .black
         window.isOpaque = true
@@ -71,29 +76,34 @@ final class VoidModeController {
 
     func disable() {
         guard isVoidModeEnabled else { return }
+        isVoidModeEnabled = false
 
-        guard let window = overlayWindow else {
-            isVoidModeEnabled = false
-            return
-        }
-
+        guard let window = overlayWindow else { return }
         overlayWindow = nil
+
         keyboardBlocker.stop()
         NSApp.presentationOptions = previousPresentationOptions
 
-        NSAnimationContext.runAnimationGroup { ctx in
-            ctx.duration = 0.2
-            ctx.allowsImplicitAnimation = true
-            window.animator().alphaValue = 0
-        }
-
+        // Defer all window teardown to a fresh runloop tick. Without this, when
+        // disable() is triggered from the toggle *inside* the overlay window, we
+        // would start tearing down the view tree currently dispatching the click,
+        // which crashes with EXC_BAD_ACCESS in objc_release.
         Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(220))
+            await Task.yield()
+
+            await NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.2
+                ctx.allowsImplicitAnimation = true
+                window.animator().alphaValue = 0
+            }
+
+            try? await Task.sleep(for: .milliseconds(50))
             window.orderOut(nil)
-            window.contentViewController = nil
-            window.close()
-            isVoidModeEnabled = false
             NSApp.activate(ignoringOtherApps: true)
+            // Window deallocates when this Task ends and releases its capture.
+            // Don't touch contentViewController or call close() — letting ARC
+            // own the lifecycle keeps SwiftUI's hosting controller teardown
+            // off the same runloop tick as orderOut.
         }
     }
 
