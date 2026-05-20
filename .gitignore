@@ -1,0 +1,14 @@
+# Generated Installer & App Binaries
+*.dmg
+*.app/
+
+# Icon Source Caches (Keeps your tree organized)
+**/void.icon/Assets/
+**/void.icon/icon.json
+
+# Xcode Tracking and Caches
+DerivedData/
+build/
+.DS_Store
+*.xcuserstate
+xcuserdata/

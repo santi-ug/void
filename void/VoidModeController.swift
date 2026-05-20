@@ -17,7 +17,8 @@ final class VoidModeController {
 
         guard !isRunningPreview else { return }
 
-        hasAccessibilityPermission = AXIsProcessTrusted()
+        let promptOption = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        hasAccessibilityPermission = AXIsProcessTrustedWithOptions(promptOption)
 
         let targetScreen = activeScreen()
         let screenFrame = targetScreen.frame
