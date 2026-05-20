@@ -47,13 +47,17 @@ final class VoidModeController {
             .ignoresCycle
         ]
 
-        let hostingController = NSHostingController(
-            rootView: VoidOverlayView()
-                .environment(self)
+        // NSHostingView (not NSHostingController) avoids AppKit resizing the
+        // window down to the SwiftUI content's intrinsic size when assigned,
+        // which would otherwise cause a visible resize hitch during the
+        // appearance animation.
+        let hostingView = NSHostingView(
+            rootView: VoidOverlayView().environment(self)
         )
-        hostingController.view.frame = NSRect(origin: .zero, size: screenFrame.size)
-        hostingController.view.autoresizingMask = [.width, .height]
-        window.contentViewController = hostingController
+        hostingView.frame = NSRect(origin: .zero, size: screenFrame.size)
+        hostingView.autoresizingMask = [.width, .height]
+        window.contentView = hostingView
+        window.setFrame(screenFrame, display: false)
 
         overlayWindow = window
         window.alphaValue = 0

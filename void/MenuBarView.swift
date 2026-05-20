@@ -17,7 +17,7 @@ struct MenuBarView: View {
                 .keyboardShortcut("q")
         }
         .padding(14)
-        .frame(width: 200)
+        .frame(width: 155)
     }
 
     private func showWindow() {

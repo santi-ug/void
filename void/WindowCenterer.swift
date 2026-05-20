@@ -50,7 +50,7 @@ struct WindowCenterer: NSViewRepresentable {
         let contentSize = contentView.frame.size
         let contentRect = NSRect(
             x: screenFrame.midX - contentSize.width / 2,
-            y: screenFrame.midY - contentSize.height / 2,
+            y: (screenFrame.midY - contentSize.height / 2) + 20,
             width: contentSize.width,
             height: contentSize.height
         )

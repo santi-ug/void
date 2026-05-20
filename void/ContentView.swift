@@ -30,15 +30,13 @@ struct VoidPanelContent: View {
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 14)
+        // Top padding leaves room for the (now in-panel) traffic lights.
+        // Asymmetric vertical padding visually centers the toggle in the
+        // space *below* them.
+        .padding(.top, 4)
+        .padding(.bottom, 20)
+        .padding(.horizontal, 24)
         .fixedSize()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(.white.opacity(0.14), lineWidth: 1)
-        }
-        .shadow(color: .black.opacity(0.22), radius: 18, x: 0, y: 10)
         .animation(.smooth(duration: 0.3), value: showsAccessibilityNudge)
     }
 }
