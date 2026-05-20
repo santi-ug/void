@@ -1,6 +1,6 @@
 # void
 
-void is a minimalist macOS menu bar utility built with Swift for low-level system control, input management, and overlay behaviors.
+void is a minimalist mac utility that "voids" your display and locks your keyboard for easy monitor cleaning.
 
 ---
 
