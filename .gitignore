@@ -1,6 +1,10 @@
 # Generated Installer & App Binaries
 *.dmg
 *.app/
+dist/
+
+# Packaging scratch space (scripts/build-dmg.sh)
+.build/
 
 # Icon Source Caches (Keeps your tree organized)
 **/void.icon/Assets/
