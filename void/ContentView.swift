@@ -17,18 +17,10 @@ struct MiniWindowView: View {
 struct VoidPanelContent: View {
     @Environment(VoidModeController.self) private var voidMode
 
-    private var showsAccessibilityNudge: Bool {
-        voidMode.isVoidModeEnabled && !voidMode.hasAccessibilityPermission
-    }
-
     var body: some View {
         VStack(spacing: 6) {
             EnableToggle()
-
-            if showsAccessibilityNudge {
-                AccessibilityNudge()
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-            }
+            VoidStatusMessage()
         }
         // Top padding leaves room for the (now in-panel) traffic lights.
         // Asymmetric vertical padding visually centers the toggle in the
@@ -37,16 +29,27 @@ struct VoidPanelContent: View {
         .padding(.bottom, 20)
         .padding(.horizontal, 24)
         .fixedSize()
-        .animation(.smooth(duration: 0.3), value: showsAccessibilityNudge)
     }
 }
 
-private struct AccessibilityNudge: View {
+/// The only channel void has for saying why nothing happened. Every message here is
+/// a refusal the user can act on, so it stays until the next attempt clears it.
+struct VoidStatusMessage: View {
+    @Environment(VoidModeController.self) private var voidMode
+
     var body: some View {
-        Text("Needs Accessibility access")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-            .lineLimit(1)
+        Group {
+            if let error = voidMode.lastError {
+                Text(error.message)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: 260)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            }
+        }
+        .animation(.smooth(duration: 0.3), value: voidMode.lastError)
     }
 }
 

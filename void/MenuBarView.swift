@@ -8,6 +8,10 @@ struct MenuBarView: View {
         VStack(alignment: .leading, spacing: 12) {
             EnableToggle()
 
+            // The menu bar is the one surface always reachable when void refuses to
+            // start, so the reason has to be readable from here too.
+            VoidStatusMessage()
+
             Divider()
 
             // Button action form Button("Label", action: method) keeps
