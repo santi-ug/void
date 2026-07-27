@@ -4,7 +4,7 @@
 
 # void
 
-**Blank the screen. Kill the keyboard. Clean your Mac.**
+**Void your screen. Kill your keyboard. Clean your Mac.**
 
 [![Release](https://img.shields.io/github/v/release/santi-ug/void?style=flat-square&color=blue)](https://github.com/santi-ug/void/releases/latest)
 [![Platform](https://img.shields.io/badge/platform-macOS%2026%2B-lightgrey?style=flat-square)](#requirements)
@@ -25,11 +25,6 @@ back off.
 
 * **Total keyboard lockout** — key presses, key releases, modifiers, and the media
   keys (brightness, volume, play/pause) are all swallowed at the system level.
-* **Self-healing input tap** — macOS disables an event tap whose callback runs slow.
-  void listens for that and re-arms itself, with a watchdog behind it in case the
-  notification is ever dropped. It does not quietly stop blocking halfway through.
-* **Off-main-thread by design** — the tap runs on its own thread, so the overlay's
-  fade-in can't stall the callback into a timeout.
 * **Brightness guard** — the overlay is pure black and your keyboard is off, so the
   on-screen toggle is the only way out. void refuses to start below 20% brightness
   rather than stranding you.
@@ -164,6 +159,3 @@ lock silently lapsed mid-session. Update.
 ## Copyright
 
 © 2026 Santiago Uribe. All rights reserved.
-
-This source is published for reference. No licence is granted to use, copy, modify,
-or distribute it. If you want to do any of those, get in touch.
